@@ -1,14 +1,15 @@
 import numpy as np
 from numpy.typing import NDArray
+from typing import Tuple
 
 
 class Solution:
-    def forward(self, x: NDArray[np.float64], w: NDArray[np.float64], b: float, activation: str) -> float:
+    def backward(self, x: NDArray[np.float64], w: NDArray[np.float64], b: float, y_true: float) -> Tuple[NDArray[np.float64], float]:
         z = np.dot(x, w) + b
-        if activation == "sigmoid":
-            result = 1.0 / (1.0 + np.exp(-z))
-        elif activation == "relu":
-            result = max(0.0, z)
-        else:
-            result = z
-        return round(float(result), 5)
+        y_cap = 1.0 / (1.0 + np.exp(-z))
+        error = y_cap - y_true
+        sigmoid_derivative = y_cap * (1.0 - y_cap)
+        delta = error * sigmoid_derivative
+        dL_dw = np.round(delta * x, 5)
+        dL_db = round(float(delta), 5)
+        return (dL_dw, dL_db)
