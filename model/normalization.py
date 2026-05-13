@@ -8,4 +8,5 @@ class Solution:
         mean = np.mean(x)
         var = np.var(x)
         x_norm = (x - mean) / np.sqrt(var + eps)
-        return np.round(gamma * x_norm + beta, 5)
+        out = gamma * x_norm + beta
+        return np.round(out, 5)
